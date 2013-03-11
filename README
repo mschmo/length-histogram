@@ -1,0 +1,3 @@
+Reads text file and prints histogram of the frequencies of the word lengths in the file.  The file's path name should be passed as a command line argument.
+
+Any questions or comments can be sent to Matthew Schmoyer at mlschmoyer@temple.edu
