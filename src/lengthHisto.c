@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#define LENGTH 16
+#define LENGTH 21 /* Max word length to check for */
 
 /* Function to itialize count_a to all 0s */
 void init_array(int count_a[]);
@@ -30,11 +30,14 @@ int fill_hist(int count_a[], char f[]);
  * Returns 1 if ch is punctuation.  Returns 0 otherwise */
 int pun_test(char ch);
 
+/* Find last element in count_a with a value and return it. */
+int find_last(int count_a[]);
+
 /* Prints a horizontal histogram of values in count_a */
-void print_hist_hor(int count_a[]);
+void print_hist_hor(int count_a[], int last);
 
 /* Prints a vertical histogram of values in count_a */
-void print_hist_ver(int count_a[]);
+void print_hist_ver(int count_a[], int last);
 
 /* Returns max value in count_a */
 int max_a(int count_a[]);
@@ -52,9 +55,9 @@ int main(int argc, char *argv[]) {
 	else {
 		if (fill_hist(count_a, argv[1])) {
 			if (check_vert())
-				print_hist_ver(count_a);
+				print_hist_ver(count_a, find_last(count_a));
 			else
-				print_hist_hor(count_a);
+				print_hist_hor(count_a, find_last(count_a));
 		}
 	}
 	
@@ -101,7 +104,7 @@ int fill_hist(int count_a[], char f_path[]) {
 		fclose(f_in);
 		return(1);
 	}
-	// File did not work
+	/* File did not work */
 	return(0);
 }
 
@@ -124,13 +127,25 @@ int pun_test(char ch) {
 		default:
 			return(0);
 	}
-	// Not punctuation
+	/* Not punctuation */
 	return(0);
 }
 
-void print_hist_hor(int count_a[]) {
+int find_last(int count_a[]) {
+	int i, last;
+	last = 1; /* Don't count 0 length words */
+	for (i = 2; i < LENGTH; i++) {
+		if (count_a[i] > 0)
+			last = i;
+	}
+	/* 1 is added for inclusion in the printing
+	functions for loops */
+	return(last + 1);
+}
+
+void print_hist_hor(int count_a[], int last) {
 	int i, j;
-	for (i=1; i < LENGTH; i++) {
+	for (i = 1; i < last; i++) {
 		printf("%2d", i);
 		printf(" ");
 		for (j=0; j < count_a[i]; j++)
@@ -139,10 +154,10 @@ void print_hist_hor(int count_a[]) {
 	}
 }
 
-void print_hist_ver(int count_a[]) {
+void print_hist_ver(int count_a[], int last) {
 	int i, j;
 	for (i = max_a(count_a); i > 0; i--) {
-		for (j = 1; j < LENGTH; j++) {
+		for (j = 1; j < last; j++) {
 			if (count_a[j] < i)
 				printf(" ");
 			else
@@ -154,7 +169,7 @@ void print_hist_ver(int count_a[]) {
 		}
 		printf("\n");
 	}
-	for (i = 1; i < LENGTH; i++)
+	for (i = 1; i < last; i++)
 		printf("%d ",i);
 	printf("\n");
 }
