@@ -1,3 +1,5 @@
 Reads text file and prints histogram of the frequencies of the word lengths in the file.  The file's path name should be passed as a command line argument.
 
+Prompt is given asking user for a vertical histogram.  If the user chooses no, a horizontal histogram is printed.
+
 Any questions or comments can be sent to Matthew Schmoyer at mlschmoyer@temple.edu
